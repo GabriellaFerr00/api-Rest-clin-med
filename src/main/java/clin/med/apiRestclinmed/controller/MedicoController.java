@@ -1,6 +1,7 @@
 package clin.med.apiRestclinmed.controller;
 
 import clin.med.apiRestclinmed.entities.MedicoEntity;
+import clin.med.apiRestclinmed.records.AtualizarCadastroMedico;
 import clin.med.apiRestclinmed.records.CadastrarMedico;
 import clin.med.apiRestclinmed.records.DadosListagemMedicos;
 import clin.med.apiRestclinmed.repositories.MedicoRepository;
@@ -10,8 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,9 +36,24 @@ public class MedicoController {
     @GetMapping
     public Page<DadosListagemMedicos> listar(@PageableDefault(sort = {"nome"}) Pageable paginacao ) {
         return medicoRepository
-                .findAll(paginacao)
+                .findAllByAtivoTrue(paginacao)
                 .map(DadosListagemMedicos::new);
         //o findall devolve um page e o page tem um metodo map dentro dele
         //não precisa do tolist, pois, o map já faz a conversao e devolve na paginacao um page do dto automaticamente
+    }
+
+    @PutMapping
+    public void atualizarMedico(@RequestBody @Valid AtualizarCadastroMedico atualizar){
+        MedicoEntity medico = medicoRepository.getReferenceById(atualizar.id());
+        medico.atualizarInformacoes(atualizar);
+        //nao precisa chamar o reposioty para salvar a alteracao, pois, eh feito automaticamente no banco de dados pela jpa
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void deletarMedico(@PathVariable Long id){
+        MedicoEntity medico = medicoRepository.getReferenceById(id);
+        medico.exclusaoLogica();
+
     }
 }

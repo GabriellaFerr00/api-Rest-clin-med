@@ -1,6 +1,7 @@
 package clin.med.apiRestclinmed.entities;
 
 import clin.med.apiRestclinmed.enums.EspecialidadesType;
+import clin.med.apiRestclinmed.records.AtualizarCadastroMedico;
 import clin.med.apiRestclinmed.records.CadastrarMedico;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -33,13 +34,32 @@ public class MedicoEntity {
     private EspecialidadesType especialidade;
     @Embedded
     private Endereco endereco;
+    private Boolean ativo;
 
     public MedicoEntity(CadastrarMedico cadastrarMedico) {
+        this.ativo = true;
         this.nome = cadastrarMedico.nome();
         this.email = cadastrarMedico.email();
         this.telefone = cadastrarMedico.telefone();
         this.crm = cadastrarMedico.crm();
         this.especialidade= cadastrarMedico.especialidadesType();
         this.endereco = new Endereco(cadastrarMedico.endereco());
+    }
+
+    public void atualizarInformacoes(AtualizarCadastroMedico atualizarDados) {
+        if (atualizarDados.nome() != null) {
+            this.nome = atualizarDados.nome();
+        }
+        if (atualizarDados.telefone() != null) {
+            this.telefone = atualizarDados.telefone();
+        }
+        if (atualizarDados.endereco() != null) {
+            this.endereco.atualizarInformacoesEndereco(atualizarDados.endereco());
+        }
+
+    }
+
+    public void exclusaoLogica() {
+        this.ativo = false;
     }
 }
