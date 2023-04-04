@@ -27,17 +27,17 @@ public class MedicoEntity {
     private Long id;
     private String nome;
     private String email;
+    private String telefone;
     private String crm;
-
     @Enumerated(EnumType.STRING)
     private EspecialidadesType especialidade;
-
     @Embedded
     private Endereco endereco;
 
     public MedicoEntity(CadastrarMedico cadastrarMedico) {
         this.nome = cadastrarMedico.nome();
         this.email = cadastrarMedico.email();
+        this.telefone = cadastrarMedico.telefone();
         this.crm = cadastrarMedico.crm();
         this.especialidade= cadastrarMedico.especialidadesType();
         this.endereco = new Endereco(cadastrarMedico.endereco());

@@ -4,6 +4,7 @@ import clin.med.apiRestclinmed.entities.Endereco;
 import clin.med.apiRestclinmed.entities.MedicoEntity;
 import clin.med.apiRestclinmed.records.CadastrarMedico;
 import clin.med.apiRestclinmed.repositories.MedicoRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class MedicoController {
 
     @PostMapping
     @Transactional
-    public void cadastrarMedico(@RequestBody CadastrarMedico cadastrarMedico){
+    public void cadastrarMedico(@RequestBody @Valid CadastrarMedico cadastrarMedico){
          medicoRepository.save(new MedicoEntity(cadastrarMedico));
     }
 }
