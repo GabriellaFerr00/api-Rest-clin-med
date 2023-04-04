@@ -1,5 +1,6 @@
 package clin.med.apiRestclinmed.entities;
 
+import clin.med.apiRestclinmed.records.AtualizarCadastroPaciente;
 import clin.med.apiRestclinmed.records.CadastrarPaciente;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -28,8 +29,9 @@ public class PacienteEntity {
     private String telefone;
     @Embedded
     private Endereco endereco;
-
+    private Boolean ativo;
     public PacienteEntity(CadastrarPaciente cadastrarPaciente) {
+        this.ativo = true;
         this.nome = cadastrarPaciente.nome();
         this.email = cadastrarPaciente.email();
         this.telefone = cadastrarPaciente.telefone();
@@ -37,5 +39,20 @@ public class PacienteEntity {
         this.endereco = new Endereco(cadastrarPaciente.endereco());
     }
 
+    public void atualizarInformacoesPaciente(AtualizarCadastroPaciente atualizar) {
+        if (atualizar.nome() != null) {
+            this.nome = atualizar.nome();
+        }
+        if (atualizar.telefone() != null) {
+            this.telefone = atualizar.telefone();
+        }
+        if (atualizar.endereco() != null) {
+            this.endereco.atualizarInformacoesEndereco(atualizar.endereco());
+        }
+    }
+
+    public void exclusaoLogicaPaciente(){
+        this.ativo = false;
+    }
 }
 
