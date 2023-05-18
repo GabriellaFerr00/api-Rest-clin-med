@@ -1,4 +1,4 @@
-package clin.med.apiRestclinmed.infra;
+package clin.med.apiRestclinmed.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
